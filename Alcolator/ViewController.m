@@ -8,89 +8,27 @@
 
 #import "ViewController.h"
 
-//@interface ViewController ()
-@interface ViewController () <UITextFieldDelegate>
+@interface ViewController ()
 
-@property (weak, nonatomic) UITextField *beerPercentTextField;
-@property (weak, nonatomic) UISlider *beerCountSlider;
-@property (weak, nonatomic) UILabel *resultLabel;
-@property (weak, nonatomic) UILabel *beerCountLabel;
-@property (weak, nonatomic) UIButton *calculateButton;
-@property (weak, nonatomic) UITapGestureRecognizer *hideKeyboardTapGestureRecognizer;
+@property (weak, nonatomic) IBOutlet UITextField *beerPercentTextField;
+
+@property (weak, nonatomic) IBOutlet UISlider *beerCountSlider;
+
+@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
+
 @property (assign, nonatomic) float beerCount;
 
-//@property (weak, nonatomic) IBOutlet UITextField *beerPercentTextField;
-//@property (weak, nonatomic) IBOutlet UISlider *beerCountSlider;
-//@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *beerCountLabel;
-//@property (weak, nonatomic) IBOutlet UIButton *calculateRatios;
+@property (weak, nonatomic) IBOutlet UILabel *beerCountLabel;
+
+@property (weak, nonatomic) IBOutlet UIButton *calculateRatios;
 
 @end
 
 @implementation ViewController
 
-- (void)loadView {
-    self.view = [UIView new];
-    
-    // allocate and initialize each of the views and gesture recognizer
-    UITextField *textField = [UITextField new];
-    UISlider *slider = [UISlider new];
-    UILabel *result = [UILabel new];
-    UILabel *label = [UILabel new];
-    UIButton *button = [UIButton new];
-    UITapGestureRecognizer *tap = [UITapGestureRecognizer new];
-    
-    // add each view and gesture recognizer as the view's subviews
-    [self.view addSubview:textField];
-    [self.view addSubview:slider];
-    [self.view addSubview:result];
-    [self.view addSubview:label];
-    [self.view addSubview:button];
-    [self.view addGestureRecognizer:tap];
-    
-    // assign the views and gesture recognizer to properties
-    self.beerPercentTextField = textField;
-    self.beerCountSlider = slider;
-    self.resultLabel = result;
-    self.beerCountLabel = label;
-    self.calculateButton = button;
-    self.hideKeyboardTapGestureRecognizer = tap;
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-    self.view.backgroundColor = [UIColor lightGrayColor];
-    
-    // tell the text field that self, this instance of ViewController, should be treated as the text field's delegate
-    self.beerPercentTextField.delegate = self; // does every UIControl have a delegate property?
-    
-    // set placeholder text
-    self.beerPercentTextField.placeholder = NSLocalizedString(@"% Alcohol Content Per Beer", @"Beer percent placeholder text");
-    
-    // tells self.beerCountSlider that when its value changes, it should call [self -sliderValueDidChange:]
-    // this is equivalent to connecting the IBAction on our previous checkpoint
-    [self.beerCountSlider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
-    
-    // set the min and max number of beers
-    self.beerCountSlider.minimumValue = 1;
-    self.beerCountSlider.maximumValue = 10;
-    
-    // tells self.calculateButton that when a finger is lifted from the button while still in its bounds, to call [self -buttonPressed:]
-    [self.calculateButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // set title of button
-    [self.calculateButton setTitle:NSLocalizedString(@"Calculate!", @"Calculate command") forState:UIControlStateNormal];
-    
-    // tells the tap gesture recognizer to call [self -tapGestureDidFire:] when it detects a tap
-    [self.hideKeyboardTapGestureRecognizer addTarget:self action:@selector(tapGestureDidFire:)];
-    
-    // gets rid of the max num of lines on a label
-    self.resultLabel.numberOfLines = 0;
-    self.beerCountLabel.numberOfLines = 0;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,7 +36,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)textFieldDidChange:(UITextField *)sender {
+- (IBAction)textFieldDidChange:(UITextField *)sender {
     NSString *enteredText = sender.text;
     float enteredNumber = [enteredText floatValue];
     
@@ -107,7 +45,7 @@
     }
 }
 
-- (void)sliderValueDidChange:(UISlider *)sender {
+- (IBAction)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     self.beerCount = sender.value;
 //    NSNumberFormatter *formatter = [NSNumberFormatter new];
@@ -123,7 +61,7 @@
     [self.beerPercentTextField resignFirstResponder];
 }
 
-- (void)buttonPressed:(UIButton *)sender {
+- (IBAction)buttonPressed:(UIButton *)sender {
     [self.beerPercentTextField resignFirstResponder];
     
     // first calc how much alcohol is in all those beers
@@ -167,7 +105,7 @@
     self.resultLabel.text = resultText;
 }
 
-- (void)tapGestureDidFire:(UITapGestureRecognizer *)sender {
+- (IBAction)tapGestureDidFire:(UITapGestureRecognizer *)sender {
     [self.beerPercentTextField resignFirstResponder];
 }
 
