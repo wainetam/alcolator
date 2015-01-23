@@ -10,31 +10,31 @@
 	<string>Alcolator</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>5450119CCA2DD394E9078F73A3071326A1F877FC</key>
-		<string>github.com:wainetam/ios-exercises.git</string>
+		<key>0DE7AE7AD9CFF14BB98E4E6109E12955949A19AC</key>
+		<string>github.com:wainetam/alcolator.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>wainetam-projects/Alcolator/Alcolator.xcodeproj</string>
+	<string>Alcolator.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>5450119CCA2DD394E9078F73A3071326A1F877FC</key>
-		<string>../../../..</string>
+		<key>0DE7AE7AD9CFF14BB98E4E6109E12955949A19AC</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>github.com:wainetam/ios-exercises.git</string>
+	<string>github.com:wainetam/alcolator.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>5450119CCA2DD394E9078F73A3071326A1F877FC</string>
+	<string>0DE7AE7AD9CFF14BB98E4E6109E12955949A19AC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5450119CCA2DD394E9078F73A3071326A1F877FC</string>
+			<string>0DE7AE7AD9CFF14BB98E4E6109E12955949A19AC</string>
 			<key>IDESourceControlWCCName</key>
-			<string>ios-exercises</string>
+			<string>alcolator</string>
 		</dict>
 	</array>
 </dict>
