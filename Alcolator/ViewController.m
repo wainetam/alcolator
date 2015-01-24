@@ -55,7 +55,6 @@
     self.beerCountLabel = label;
     self.calculateButton = button;
     self.hideKeyboardTapGestureRecognizer = tap;
-    
 }
 
 - (void)viewDidLoad {
@@ -82,7 +81,7 @@
     [self.calculateButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     // set title of button
-    [self.calculateButton setTitle:NSLocalizedString(@"Calculate!", @"Calculate command") forState:UIControlStateNormal];
+    [self.calculateButton setTitle:NSLocalizedString(@"Calculate", @"Calculate command") forState:UIControlStateNormal];
     
     // tells the tap gesture recognizer to call [self -tapGestureDidFire:] when it detects a tap
     [self.hideKeyboardTapGestureRecognizer addTarget:self action:@selector(tapGestureDidFire:)];
@@ -103,34 +102,43 @@
 
     self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     self.beerPercentTextField.borderStyle = UITextBorderStyleRoundedRect;
+    self.beerPercentTextField.font = [UIFont fontWithName:@"Didot" size:16];
+    self.beerPercentTextField.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
     
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
-    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 4);
+    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
+    self.resultLabel.font = [UIFont fontWithName:@"Didot" size:16];
     
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame); // QUESTION: where is best place to set properties for subviews? more efficient/readable way to do it?
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     self.calculateButton.backgroundColor = self.view.tintColor;
     self.calculateButton.layer.borderWidth = 2.0;
+
+    // QUESTION: why doesn't this work?
+    self.calculateButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
 //    self.calculateButton.layer.borderColor = [UIColor blueColor].CGColor; // QUESTION: why need to use layer to set corner radius and border attributes?
+    
     self.calculateButton.layer.borderColor = self.view.tintColor.CGColor;
     self.calculateButton.titleLabel.textColor = [UIColor whiteColor];
+    self.calculateButton.titleLabel.font = [UIFont fontWithName:@"Didot-Bold" size:20];
     [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     self.calculateButton.layer.cornerRadius = 5;
 
-    
-//    [self.view setTranslatesAutoresizingMaskIntoConstraints:YES];
-
-    for (UIView* subview in self.view.subviews) {
-//        subview.translatesAutoresizingMaskIntoConstraints = YES;
-        subview.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    }
+//    for (UIView *subview in self.view.subviews) {
+//        if([subview isKindOfClass:[UILabel class]]) { QUESTION: why can't do this?
+//            (UILabel *)subview.font = [UIFont fontWithName:@"Didot" size:16];
+//        }
+//        subview.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//    }
     
 //    self.beerCountSlider.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     
+//    self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 }
 
 
