@@ -37,7 +37,7 @@
     UISlider *slider = [UISlider new];
     UILabel *result = [UILabel new];
     UILabel *label = [UILabel new];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     UITapGestureRecognizer *tap = [UITapGestureRecognizer new];
     
     // add each view and gesture recognizer as the view's subviews
@@ -68,7 +68,32 @@
     
     // set placeholder text
     self.beerPercentTextField.placeholder = NSLocalizedString(@"% Alcohol Content Per Beer", @"Beer percent placeholder text");
+
+    // config style of subviews
+    for (UIView *subview in self.view.subviews) {
+        if([subview isKindOfClass:[UILabel class]] || [subview isKindOfClass:[UITextField class]]) {
+            //            (UILabel *)subview.font = [UIFont fontWithName:@"Didot" size:16];
+            [(UILabel *)subview setFont:[UIFont fontWithName:@"Didot" size:16]]; // QUESTION why need to use explicit setter vs dot notation?
+        }
+    }
     
+//    self.beerCountLabel.font = [UIFont fontWithName:@"Didot" size:16];
+    
+    self.beerPercentTextField.borderStyle = UITextBorderStyleRoundedRect;
+//    self.beerPercentTextField.font = [UIFont fontWithName:@"Didot" size:16];
+
+//    self.resultLabel.font = [UIFont fontWithName:@"Didot" size:16];
+    
+    self.calculateButton.backgroundColor = self.view.tintColor;
+    self.calculateButton.layer.borderWidth = 2.0;
+    
+    self.calculateButton.layer.borderColor = self.view.tintColor.CGColor;
+    self.calculateButton.titleLabel.textColor = [UIColor whiteColor];
+    self.calculateButton.titleLabel.font = [UIFont fontWithName:@"Didot-Bold" size:20];
+    [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    self.calculateButton.layer.cornerRadius = 5;
+
     // tells self.beerCountSlider that when its value changes, it should call [self -sliderValueDidChange:]
     // this is equivalent to connecting the IBAction on our previous checkpoint
     [self.beerCountSlider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
@@ -90,48 +115,112 @@
     self.resultLabel.numberOfLines = 0;
     
     self.beerCountLabel.numberOfLines = 0;
+    
+    // bc we are implementing auto layout programmatically
+    for (UIView *subview in self.view.subviews) {
+        subview.translatesAutoresizingMaskIntoConstraints = NO;
+    }
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    CGFloat viewWidth = 320;
+    CGFloat viewWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat padding = 30;
     CGFloat itemWidth = viewWidth - padding - padding;
     CGFloat itemHeight = 44;
 
     self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
-    self.beerPercentTextField.borderStyle = UITextBorderStyleRoundedRect;
-    self.beerPercentTextField.font = [UIFont fontWithName:@"Didot" size:16];
-    self.beerPercentTextField.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
     self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
     
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
     self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
-    self.resultLabel.font = [UIFont fontWithName:@"Didot" size:16];
     
-    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame); // QUESTION: where is best place to set properties for subviews? more efficient/readable way to do it?
+    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
     self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
-    self.calculateButton.backgroundColor = self.view.tintColor;
-    self.calculateButton.layer.borderWidth = 2.0;
-
+    
     // QUESTION: why doesn't this work?
     self.calculateButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-//    self.calculateButton.layer.borderColor = [UIColor blueColor].CGColor; // QUESTION: why need to use layer to set corner radius and border attributes?
+    // create dictionary that associates keys to any view we are defining
+    NSDictionary *viewsDictionary = @{@"label": self.beerCountLabel, @"textField": self.beerPercentTextField, @"slider":self.beerCountSlider, @"result":self.resultLabel, @"button":self.calculateButton};
+                                      
+    // create constraints for subviews
+    NSDictionary *metrics = @{@"padding": @30, @"buttonHeight": @40, @"textFieldHeight": @40};
     
-    self.calculateButton.layer.borderColor = self.view.tintColor.CGColor;
-    self.calculateButton.titleLabel.textColor = [UIColor whiteColor];
-    self.calculateButton.titleLabel.font = [UIFont fontWithName:@"Didot-Bold" size:20];
-    [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.calculateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    self.calculateButton.layer.cornerRadius = 5;
-
+    NSArray *beerCountLabelConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[label]"
+                                                                                        options:0
+                                                                                        metrics:metrics
+                                                                                          views:viewsDictionary];
+    
+    NSArray *beerCountLabelConstraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[label]"
+                                                                                        options:0
+                                                                                        metrics:metrics
+                                                                                          views:viewsDictionary];
+    
+    [self.view addConstraints:beerCountLabelConstraint_V];
+    [self.view addConstraints:beerCountLabelConstraint_H];
+    
+    
+    NSArray *beerPercentTextFieldConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[label]-padding-[textField(textFieldHeight)]"
+                                                                                            options:0
+                                                                                            metrics:metrics
+                                                                                              views:viewsDictionary]; // QUESTION: does this overwrite CGRECT above? do you need to create a frame?
+    
+    NSArray *beerPercentTextFieldConstraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[textField]-padding-|"
+                                                                                            options:0
+                                                                                            metrics:metrics
+                                                                                              views:viewsDictionary];
+    
+    [self.view addConstraints:beerPercentTextFieldConstraint_V];
+    [self.view addConstraints:beerPercentTextFieldConstraint_H];
+    
+    NSArray *beerCountSliderConstaint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[textField]-padding-[slider]"
+                                                                                            options:0
+                                                                                            metrics:metrics
+                                                                                              views:viewsDictionary];
+    
+    NSArray *beerCountSliderConstaint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[slider]-padding-|"
+                                                                                            options:0
+                                                                                            metrics:metrics
+                                                                                              views:viewsDictionary];
+    
+    [self.view addConstraints:beerCountSliderConstaint_V];
+    [self.view addConstraints:beerCountSliderConstaint_H];
+    
+    NSArray *resultLabelConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[slider]-padding-[result]"
+                                                                                       options:0
+                                                                                       metrics:metrics
+                                                                                         views:viewsDictionary];
+    
+    NSArray *resultLabelConstraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[result]-padding-|"
+                                                                                       options:0
+                                                                                       metrics:metrics
+                                                                                         views:viewsDictionary];
+    
+    [self.view addConstraints:resultLabelConstraint_V];
+    [self.view addConstraints:resultLabelConstraint_H];
+    
+    
+    NSArray *calculateButtonConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[result]-padding-[button(buttonHeight)]"
+                                                                                   options:0
+                                                                                   metrics:metrics
+                                                                                     views:viewsDictionary];
+    
+    NSArray *calculateButtonConstraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[button]-padding-|"
+                                                                                   options:0
+                                                                                   metrics:metrics
+                                                                                     views:viewsDictionary];
+    
+    [self.view addConstraints:calculateButtonConstraint_V];
+    [self.view addConstraints:calculateButtonConstraint_H];
+    
 //    for (UIView *subview in self.view.subviews) {
-//        if([subview isKindOfClass:[UILabel class]]) { QUESTION: why can't do this?
+//        if([subview isKindOfClass:[UILabel class]]) {
 //            (UILabel *)subview.font = [UIFont fontWithName:@"Didot" size:16];
+//            [(UILabel *)subview setFont:[UIFont fontWithName:@"Didot" size:16]];
 //        }
 //        subview.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 //    }
