@@ -73,6 +73,13 @@
     for (UIView *subview in self.view.subviews) {
         if([subview isKindOfClass:[UILabel class]] || [subview isKindOfClass:[UITextField class]]) {
             //            (UILabel *)subview.font = [UIFont fontWithName:@"Didot" size:16];
+            UIFont* font = [UIFont fontWithName:@"Didot" size:16];
+//            UILabel* label = (UILabel*) subview;
+//            label.font = font;
+//            [label setFont:font];
+            
+            ((UILabel*) subview).font = font;
+            
             [(UILabel *)subview setFont:[UIFont fontWithName:@"Didot" size:16]]; // QUESTION why need to use explicit setter vs dot notation?
         }
     }
@@ -96,6 +103,9 @@
 
     // tells self.beerCountSlider that when its value changes, it should call [self -sliderValueDidChange:]
     // this is equivalent to connecting the IBAction on our previous checkpoint
+
+    [self.beerPercentTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     [self.beerCountSlider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
     
     // set the min and max number of beers
@@ -130,16 +140,16 @@
     CGFloat itemWidth = viewWidth - padding - padding;
     CGFloat itemHeight = 44;
 
-    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
+//    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     
     CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
-    self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
+//    self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
     
     CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
-    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
+//    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
     
     CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
-    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
+//    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     
     // QUESTION: why doesn't this work?
     self.calculateButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
