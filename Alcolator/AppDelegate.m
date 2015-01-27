@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Bloc. All rights reserved.
 //
 
+#import "MainMenuViewController.h"
 #import "ViewController.h"
 #import "AppDelegate.h"
 
@@ -20,10 +21,14 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Override point for customization after application launch.
-    ViewController *viewController = [[ViewController alloc] init];
-    self.window.rootViewController = viewController;
-    [self.window makeKeyAndVisible];
+//    ViewController *viewController = [[ViewController alloc] init];
+//    self.window.rootViewController = viewController;
     
+    MainMenuViewController *mainMenuViewController = [[MainMenuViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mainMenuViewController];
+    self.window.rootViewController = navigationController;
+    
+    [self.window makeKeyAndVisible];
     
     return YES;
 }

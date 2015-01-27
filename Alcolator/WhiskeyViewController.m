@@ -13,6 +13,20 @@
 @end
 
 @implementation WhiskeyViewController
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.viewTitleName = @"Whiskey";
+    self.title = NSLocalizedString(self.viewTitleName, @"whiskey");
+    
+    self.drinkVesselNameSingular = @"shot";
+    self.drinkVesselNamePlural = @"shots";
+}
+
+- (void)updateTitle {
+    self.title = [NSString stringWithFormat:@"%@ (%.0f %@)", @"Whiskey", self.conversionDrinkCount, self.conversionDrinkText];
+    // QUESTION: how to reference current self.title?
+}
+
 - (void)buttonPressed:(UIButton *)sender {
     [self.beerPercentTextField resignFirstResponder];
     
@@ -27,13 +41,13 @@
     
     // now calc the equiv amount of whisky
     
-    CGFloat ouncesInOneWhiskeyGlass = 1;
+    CGFloat ouncesInOneWhiskeyGlass = 1.5;
     CGFloat alcoholPercentageOfWhiskey = 0.4;
     
     CGFloat ouncesOfAlcoholPerWhiskeyGlass = ouncesInOneWhiskeyGlass * alcoholPercentageOfWhiskey;
     CGFloat numberOfWhiskeyGlassesForEquivalentAlcoholAmount = ouncesOfAlcoholTotal / ouncesOfAlcoholPerWhiskeyGlass;
     
-    // decide whether to use "beer"/"beers" and "glass"/"glasses"
+    // decide whether to use "beer"/"beers" and "shot"/"shots"
     
     NSString *beerText;
     
@@ -46,15 +60,20 @@
     NSString *whiskeyText;
     
     if (numberOfWhiskeyGlassesForEquivalentAlcoholAmount == 1) {
-        whiskeyText = NSLocalizedString(@"shot", @"singular shot of whiskey");
+        whiskeyText = NSLocalizedString(self.drinkVesselNameSingular, @"singular shot of whiskey");
     } else {
-        whiskeyText = NSLocalizedString(@"shots", @"plural of shot");
+        whiskeyText = NSLocalizedString(self.drinkVesselNamePlural, @"plural of shot");
     }
     
     // generate result text
     NSString *resultText = [NSString stringWithFormat:NSLocalizedString(@"%.1f %@ contains as much alcohol as %.1lf %@ of whiskey.", nil), numberOfBeers, beerText, numberOfWhiskeyGlassesForEquivalentAlcoholAmount, whiskeyText];
     
     self.resultLabel.text = resultText;
+    
+    // update title
+    self.conversionDrinkCount = numberOfWhiskeyGlassesForEquivalentAlcoholAmount;
+    self.conversionDrinkText = whiskeyText;
+    [self updateTitle];
 }
 
 

@@ -14,6 +14,11 @@
 @property (weak, nonatomic) UISlider *beerCountSlider;
 @property (weak, nonatomic) UILabel *resultLabel;
 @property (weak, nonatomic) UILabel *beerCountLabel;
+@property (assign, nonatomic) CGFloat conversionDrinkCount;
+@property (weak, nonatomic) NSString *conversionDrinkText;
+@property (weak, nonatomic) NSString *viewTitleName;
+@property (weak, nonatomic) NSString *drinkVesselNameSingular;
+@property (weak, nonatomic) NSString *drinkVesselNamePlural;
 
 - (void) buttonPressed:(UIButton*) sender;
 

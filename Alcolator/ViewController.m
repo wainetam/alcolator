@@ -61,6 +61,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    self.viewTitleName = @"Wine";
+    self.title = NSLocalizedString(self.viewTitleName, @"wine");
+
+    self.drinkVesselNameSingular = @"glass";
+    self.drinkVesselNamePlural = @"glasses";
+    
     self.view.backgroundColor = [UIColor lightGrayColor];
     
     // tell the text field that self, this instance of ViewController, should be treated as the text field's delegate
@@ -73,23 +79,18 @@
     for (UIView *subview in self.view.subviews) {
         if([subview isKindOfClass:[UILabel class]] || [subview isKindOfClass:[UITextField class]]) {
             //            (UILabel *)subview.font = [UIFont fontWithName:@"Didot" size:16];
-            UIFont* font = [UIFont fontWithName:@"Didot" size:16];
+//            UIFont* font = [UIFont fontWithName:@"Didot" size:16];
 //            UILabel* label = (UILabel*) subview;
 //            label.font = font;
 //            [label setFont:font];
             
-            ((UILabel*) subview).font = font;
+//            ((UILabel*) subview).font = font;
             
             [(UILabel *)subview setFont:[UIFont fontWithName:@"Didot" size:16]]; // QUESTION why need to use explicit setter vs dot notation?
         }
     }
     
-//    self.beerCountLabel.font = [UIFont fontWithName:@"Didot" size:16];
-    
     self.beerPercentTextField.borderStyle = UITextBorderStyleRoundedRect;
-//    self.beerPercentTextField.font = [UIFont fontWithName:@"Didot" size:16];
-
-//    self.resultLabel.font = [UIFont fontWithName:@"Didot" size:16];
     
     self.calculateButton.backgroundColor = self.view.tintColor;
     self.calculateButton.layer.borderWidth = 2.0;
@@ -158,9 +159,9 @@
     NSDictionary *viewsDictionary = @{@"label": self.beerCountLabel, @"textField": self.beerPercentTextField, @"slider":self.beerCountSlider, @"result":self.resultLabel, @"button":self.calculateButton};
                                       
     // create constraints for subviews
-    NSDictionary *metrics = @{@"padding": @30, @"buttonHeight": @40, @"textFieldHeight": @40};
+    NSDictionary *metrics = @{@"paddingBelowNavBar": @64, @"padding": @30, @"buttonHeight": @40, @"textFieldHeight": @40};
     
-    NSArray *beerCountLabelConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-padding-[label]"
+    NSArray *beerCountLabelConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-paddingBelowNavBar-[label]"
                                                                                         options:0
                                                                                         metrics:metrics
                                                                                           views:viewsDictionary];
@@ -177,7 +178,7 @@
     NSArray *beerPercentTextFieldConstraint_V = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[label]-padding-[textField(textFieldHeight)]"
                                                                                             options:0
                                                                                             metrics:metrics
-                                                                                              views:viewsDictionary]; // QUESTION: does this overwrite CGRECT above? do you need to create a frame?
+                                                                                              views:viewsDictionary];
     
     NSArray *beerPercentTextFieldConstraint_H = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-padding-[textField]-padding-|"
                                                                                             options:0
@@ -258,17 +259,20 @@
 - (void)sliderValueDidChange:(UISlider *)sender {
     NSLog(@"Slider value changed to %f", sender.value);
     self.beerCount = sender.value;
-    //    NSNumberFormatter *formatter = [NSNumberFormatter new];
-    //    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    
-    //    NSNumber *beerCountNum = [formatter self.beerCount];
-    NSString *formattedBeerCountStr = [NSString stringWithFormat:@"%.1f",self.beerCount];
+
+    NSString *formattedBeerCountStr = [NSString stringWithFormat:@"%.1f", self.beerCount];
     
     self.beerCountLabel.text = NSLocalizedString([formattedBeerCountStr stringByAppendingString: @" beers"], @"beer count");
     
-    [self buttonPressed: self.calculateButton];
+    [self updateTitle];
     
+    [self buttonPressed: self.calculateButton];
+
     [self.beerPercentTextField resignFirstResponder];
+}
+
+- (void)updateTitle {
+    self.title = [NSString stringWithFormat:@"%@ (%.0f %@)", self.viewTitleName, self.conversionDrinkCount, self.conversionDrinkText];
 }
 
 - (void)buttonPressed:(UIButton *)sender {
@@ -304,15 +308,20 @@
     NSString *wineText;
     
     if (numberOfWineGlassesForEquivalentAlcoholAmount == 1) {
-        wineText = NSLocalizedString(@"glass", @"singular glass of wine");
+        wineText = NSLocalizedString(self.drinkVesselNameSingular, @"singular glass of wine");
     } else {
-        wineText = NSLocalizedString(@"glasses", @"plural of glasses");
+        wineText = NSLocalizedString(self.drinkVesselNamePlural, @"plural of glasses");
     }
     
     // generate result text
     NSString *resultText = [NSString stringWithFormat:NSLocalizedString(@"%.1f %@ contains as much alcohol as %.1lf %@ of wine.", nil), numberOfBeers, beerText, numberOfWineGlassesForEquivalentAlcoholAmount, wineText];
     
     self.resultLabel.text = resultText;
+    
+    // update title
+    self.conversionDrinkCount = numberOfWineGlassesForEquivalentAlcoholAmount;
+    self.conversionDrinkText = wineText;
+    [self updateTitle];
 }
 
 - (void)tapGestureDidFire:(UITapGestureRecognizer *)sender {
