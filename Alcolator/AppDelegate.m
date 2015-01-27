@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Bloc. All rights reserved.
 //
 
-#import "MainMenuViewController.h"
-#import "ViewController.h"
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "WhiskeyViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,21 +16,26 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Override point for customization after application launch.
-//    ViewController *viewController = [[ViewController alloc] init];
-//    self.window.rootViewController = viewController;
+    ViewController *wineVC = [[ViewController alloc] init];
+    WhiskeyViewController *whiskeyVC = [[WhiskeyViewController alloc] init];
+    UITabBarController *tabBarVC = [[UITabBarController alloc] init];
+    tabBarVC.viewControllers = @[wineVC, whiskeyVC];
+    tabBarVC.delegate = self; // assign appDelegate to be delegate of tabBarVC
     
-    MainMenuViewController *mainMenuViewController = [[MainMenuViewController alloc] init];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mainMenuViewController];
-    self.window.rootViewController = navigationController;
+    self.window.rootViewController = tabBarVC;
     
     [self.window makeKeyAndVisible];
     
     return YES;
+}
+
+// QUESTION: can only have one tabBarController var for appDelegate? has to be rootController?
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    NSLog(@"New view controller selected: %@", viewController.title);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

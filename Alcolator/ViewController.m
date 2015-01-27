@@ -28,6 +28,19 @@
 @end
 
 @implementation ViewController
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.viewTitleName = @"Wine";
+        self.title = NSLocalizedString(self.viewTitleName, nil);
+        
+        // since we don't have icons, let's move the title to the middle of the tab bar
+        [self.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -18)];
+    }
+    
+    return self;
+}
 
 - (void)loadView {
     self.view = [UIView new];
@@ -60,14 +73,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-    self.viewTitleName = @"Wine";
-    self.title = NSLocalizedString(self.viewTitleName, @"wine");
 
     self.drinkVesselNameSingular = @"glass";
     self.drinkVesselNamePlural = @"glasses";
     
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor colorWithRed:0.741 green:0.925 blue:0.714 alpha:1]; /*#bdecb6*/
     
     // tell the text field that self, this instance of ViewController, should be treated as the text field's delegate
     self.beerPercentTextField.delegate = self; // QUESTION: does every UIControl have a delegate property?
@@ -138,22 +148,22 @@
     
     CGFloat viewWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat padding = 30;
-    CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = 44;
+//    CGFloat itemWidth = viewWidth - padding - padding;
+//    CGFloat itemHeight = 44;
 
 //    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     
-    CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
+//    CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
 //    self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
     
-    CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
+//    CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
 //    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
     
-    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
+//    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
 //    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     
     // QUESTION: why doesn't this work?
-    self.calculateButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.calculateButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     // create dictionary that associates keys to any view we are defining
     NSDictionary *viewsDictionary = @{@"label": self.beerCountLabel, @"textField": self.beerPercentTextField, @"slider":self.beerCountSlider, @"result":self.resultLabel, @"button":self.calculateButton};
@@ -269,6 +279,7 @@
     [self buttonPressed: self.calculateButton];
 
     [self.beerPercentTextField resignFirstResponder];
+    [self.tabBarItem setBadgeValue:[NSString stringWithFormat:@"%d", (int) sender.value]];
 }
 
 - (void)updateTitle {

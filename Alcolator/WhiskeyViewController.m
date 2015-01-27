@@ -13,17 +13,27 @@
 @end
 
 @implementation WhiskeyViewController
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.viewTitleName = @"Whiskey";
+        self.title = NSLocalizedString(self.viewTitleName, nil);
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.viewTitleName = @"Whiskey";
-    self.title = NSLocalizedString(self.viewTitleName, @"whiskey");
-    
+
+    self.view.backgroundColor = [UIColor colorWithRed:0.992 green:0.992 blue:0.588 alpha:1]; /*#fdfd96*/
     self.drinkVesselNameSingular = @"shot";
     self.drinkVesselNamePlural = @"shots";
 }
 
 - (void)updateTitle {
-    self.title = [NSString stringWithFormat:@"%@ (%.0f %@)", @"Whiskey", self.conversionDrinkCount, self.conversionDrinkText];
+    self.title = [NSString stringWithFormat:@"%@ (%.0f %@)", self.viewTitleName, self.conversionDrinkCount, self.conversionDrinkText];
     // QUESTION: how to reference current self.title?
 }
 
