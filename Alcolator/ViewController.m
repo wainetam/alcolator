@@ -62,7 +62,14 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.viewTitleName = @"Wine";
-    self.title = NSLocalizedString(self.viewTitleName, @"wine");
+//    self.title = NSLocalizedString(self.viewTitleName, @"wine");
+    
+    // QUESTION: why do this vs just self.title above
+    // right place to set these here?
+    [self.navigationItem setTitle:self.viewTitleName]; // prop only exists bc we are using a nav controller in appDelegate?
+    // QUESTION: is this right -- to create a selector, etc for a back button?
+    UIBarButtonItem *leftBackButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(backPressed:)];
+    self.navigationItem.leftBarButtonItem = leftBackButton;
 
     self.drinkVesselNameSingular = @"glass";
     self.drinkVesselNamePlural = @"glasses";
@@ -133,23 +140,28 @@
     }
 }
 
+// QUESTION: need to add
+- (void) backPressed:(UIButton *) sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
     CGFloat viewWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat padding = 30;
-    CGFloat itemWidth = viewWidth - padding - padding;
-    CGFloat itemHeight = 44;
+//    CGFloat itemWidth = viewWidth - padding - padding;
+//    CGFloat itemHeight = 44;
 
 //    self.beerPercentTextField.frame = CGRectMake(padding, padding, itemWidth, itemHeight);
     
-    CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
+//    CGFloat bottomOfTextField = CGRectGetMaxY(self.beerPercentTextField.frame);
 //    self.beerCountSlider.frame = CGRectMake(padding, bottomOfTextField + padding, itemWidth, itemHeight);
     
-    CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
+//    CGFloat bottomOfSlider = CGRectGetMaxY(self.beerCountSlider.frame);
 //    self.resultLabel.frame = CGRectMake(padding, bottomOfSlider + padding, itemWidth, itemHeight * 3);
     
-    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
+//    CGFloat bottomOfLabel = CGRectGetMaxY(self.resultLabel.frame);
 //    self.calculateButton.frame = CGRectMake(padding, bottomOfLabel + padding, itemWidth, itemHeight);
     
     // QUESTION: why doesn't this work?
